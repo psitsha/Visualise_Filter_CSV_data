@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>CSV File CPI 2012-2017</title>
+        <link rel="icon" type="image/png" href="favicon.png">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <style>          
+
+            #myBtn {
+                display: none;
+                position: fixed;
+                bottom: 20px;
+                right: 30px;
+                z-index: 99;
+                font-size: 18px;
+                border: none;
+                outline: none;
+                background-color: red;
+                color: white;
+                cursor: pointer;
+                padding: 15px;
+                border-radius: 4px;
+            }
+
+            #myBtn:hover {
+                background-color: #555;
+            }
+        </style>
+    </head>
+    <body>
+        <button onclick="topFunction()" id="myBtn" title="Go to top">Top</button>
+        <div class="container">
+            <div class="table-responsive">
+                <h1 align="center">Corruption Perceptions Index (CPI) 2012 till 2017</h1>
+                <br />
+                <div align="center">
+                    <button type="button" name="load_data" id="load_data" class="btn btn-info">Load Data</button> &nbsp;
+                    <button onclick="location.reload();" type="button" name="load_data" id="load_data" class="btn btn-info">Clear Data</button>
+                   
+                </div>
+                <br />                
+                <div align="center">
+                    <input type="text" id="myCountryInput" onkeyup="myCountryFunction()" placeholder="Type in a Country..." title="Type in a country">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="text" id="myRegionInput" onkeyup="myRegionFunction()" placeholder="Type in a Region..." title="Type in a region">
+                </div>
+                <br /><br />
+                <div id="cpi_table">
+                </div>
+            </div>
+        </div>
+
+        <script>
+            $(document).ready(function () {
+                $('#load_data').click(function () {
+                    $.ajax({
+                        url: "CPI2012-2017.csv",
+                        dataType: "text",
+                        success: function (data)
+                        {
+                            var cpi_data = data.split(/\r?\n|\r/);
+                            var table_data = '<table class="table table-bordered table-striped">';
+                            for (var count = 0; count < cpi_data.length; count++)
+                            {
+                                var cell_data = cpi_data[count].split(",");
+                                table_data += '<tr>';
+                                for (var cell_count = 0; cell_count < cell_data.length; cell_count++)
+                                {
+                                    if (count === 0)
+                                    {
+                                        table_data += '<th>' + cell_data[cell_count] + '</th>';
+                                    } else
+                                    {
+                                        table_data += '<td>' + cell_data[cell_count] + '</td>';
+                                    }
+                                }
+                                table_data += '</tr>';
+                            }
+                            table_data += '</table>';
+                            $('#cpi_table').html(table_data);
+                        },
+                        error: function () {
+                            $('#cpi_table').html("Error with ajax");
+                        }
+                    });
+                });
+
+            });
+        </script>
+
+        <script>
+            function myCountryFunction() {
+                var input, filter, table, tr, td, i;
+                input = document.getElementById("myCountryInput");
+                filter = input.value.toUpperCase();
+                table = document.getElementById("cpi_table");
+                tr = table.getElementsByTagName("tr");
+                for (i = 0; i < tr.length; i++) {
+                    td = tr[i].getElementsByTagName("td")[0];
+                    if (td) {
+                        if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                            tr[i].style.display = "";
+                        } else {
+                            tr[i].style.display = "none";
+                        }
+                    }
+                }
+            }
+        </script>
+
+        <script>
+            function myRegionFunction() {
+                var input, filter, table, tr, td, i;
+                input = document.getElementById("myRegionInput");
+                filter = input.value.toUpperCase();
+                table = document.getElementById("cpi_table");
+                tr = table.getElementsByTagName("tr");
+                for (i = 0; i < tr.length; i++) {
+                    td = tr[i].getElementsByTagName("td")[2];
+                    if (td) {
+                        if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                            tr[i].style.display = "";
+                        } else {
+                            tr[i].style.display = "none";
+                        }
+                    }
+                }
+            }
+        </script>
+        <script>
+// When the user scrolls down 20px from the top of the document, show the button
+            window.onscroll = function () {
+                scrollFunction()
+            };
+
+            function scrollFunction() {
+                if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                    document.getElementById("myBtn").style.display = "block";
+                } else {
+                    document.getElementById("myBtn").style.display = "none";
+                }
+            }
+
+// When the user clicks on the button, scroll to the top of the document
+            function topFunction() {
+                document.body.scrollTop = 0;
+                document.documentElement.scrollTop = 0;
+            }
+        </script>
+
+
+    </body>
+    
+
+
+</html>
+
