@@ -36,11 +36,11 @@
                 //when we click on button with id #load_data the jquery code below will run
                 $('#load_data').click(function () {
                     $.ajax({
-                        url: "CPI2012-2017.csv", //making ajax request under our 
+                        url: "CPI2012-2017.csv", //making ajax request under our path
                         dataType: "text", //define that we want data in text format
                         success: function (data)
                         {   //success callback function if request completed successfully
-                            //receive data in text format and want to conver to table
+                            //receive data in text format and want to convert into table
                             var cpi_data = data.split(/\r?\n|\r/);  //regex to split csv row 
                             var table_data = '<table class="table table-bordered table-striped">';  //Bootstrap library class 
                             //looping through the array of cpi_data and print into row_data variable
@@ -62,7 +62,7 @@
                                         table_data += '<td>' + row_data[cell_count] + '</td>';  //print every other data from cell_count index 1 upto last row_data.length 
                                     }
                                 }
-                                table_data += '</tr>';  //close table tow tag
+                                table_data += '</tr>';  //append close table row tag
                             }
                             table_data += '</table>';  //append close table tag after converting csv file data and store into table data variable
 
