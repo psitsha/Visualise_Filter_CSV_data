@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<!--
+This visualisation is work in progress aimed at graphing the countriess cpi score for the year 2017 only 
+But due to time constraint of the test and the complexity of the dataset, 
+I am unable to finish d3 javascript coding of the visualisation I had already started 
+-->
+<html>
+    <head>
+        <title>Data Visualisatin</title>
+        <link rel="icon" type="image/png" href="favicon.png">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="d3.v4.js"></script>
+        <link href="css/newCascadeStyleSheet.css" rel="stylesheet" type="text/css"/>
+    </head>
+    <body>
+        <button onclick="topFunction()" id="myBtn" title="Go to top">Top</button>
+        <h1 align="center">Corruption Perceptions Index (CPI) Graph for 2017</h1>
+
+        <script>
+            //d3 built in method to load the csv file
+            //Arguments, path to data file and call back function
+            //store data in a variable values to reference later
+            d3.csv("CPI2012-2017_1.csv", function (values) {
+
+                //create our canvas with width and height attributes
+                var canvas = d3.select("body").append("svg")  //container canvas
+                        .attr("width", 500)
+                        .attr("height", 10000);
+
+
+//Country,ISO3,Region,CPI_score_2017,CPI score 2016,CPI score 2015,CPI score 2014,CPI Score 2013,CPI Score 2012
+//,,,,,,,,
+//New Zealand,NZL,AP,89,90,91,91,91,90
+//,,,,,,,,
+//Denmark,DNK,WE/EU,88,90,91,92,91,90
+//,,,,,,,,
+//Finland,FIN,WE/EU,85,89,90,89,89,90
+//,,,,,,,,
+//Norway,NOR,WE/EU,85,85,88,86,86,85
+
+                //add our bars referencing data store in our file
+                canvas.selectAll("rect")
+                        .data(values)  //where our data comes from
+                        .enter()
+                        //.append("rect").filter( function(d){ return d.CPI_score_2017 * 5 > 80})
+                        .append("rect") //append rectangle for each data element
+                        .attr("width", function (d) {   //d argument to rererence our data
+                            return d.CPI_score_2017 * 5;  //specifying which property of our data element we are referencing (CPI_score_2017) * 5  to size the bars
+                        })
+                        .attr("height", 20)    //make space
+                        .attr("y", function (d, i) {   //y attr is a function of the index that  
+                            return i * 20;  //returns the index of each data element 
+                        })
+                        .attr("fill", "cyan")
+                        .attr("alt", function (d) {
+                            return d.Country;
+                        });
+
+                //addd text/labels attached to each bar
+                canvas.selectAll("text")
+                        .data(values)
+                        .enter()
+                        .append("text")
+                        .attr("fill", "black")
+                        .attr("y", function (d, i) {
+                            return i * 20 + 13;
+                        })
+                        .attr("x", 5)
+                        .text(function (d) {
+                            return d.CPI_score_2017 + " " + d.Country;  //return the cpi score with corresponding country name
+                        });
+
+            });
+        </script>
+        <script>
+// When the user scrolls down 20px from the top of the document, show the button
+            window.onscroll = function () {
+                scrollFunction()
+            };
+
+            function scrollFunction() {
+                if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                    document.getElementById("myBtn").style.display = "block";
+                } else {
+                    document.getElementById("myBtn").style.display = "none";
+                }
+            }
+
+// When the user clicks on the button, scroll to the top of the document
+            function topFunction() {
+                document.body.scrollTop = 0;
+                document.documentElement.scrollTop = 0;
+            }
+        </script>
+    </body>
+</html>
